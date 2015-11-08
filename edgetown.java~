@@ -1,0 +1,120 @@
+import java.io.*;
+import java.util.*;
+public class edgetown{
+	static int costos[][];
+	static int costos2[][];
+	static ArrayList<Integer> nodos = new ArrayList<Integer>();
+	static ArrayList<Integer> nodos2 = new ArrayList<Integer>(); 
+
+public static int dijkstra(int x, int y, int costos[][]){
+	int posX = x;
+        int posY = y;
+        int[] predecesores = new int[costos.length];
+        Set<Integer> visitados = new HashSet<Integer>();
+        visitados.add(posX);
+        int[] costosMinimos = new int[costos.length];
+        //inicializo predecesores y costos minimos
+        for(int i = 0; i<costos.length; i++){
+                costosMinimos[i] = costos[posX][i];
+                if(costosMinimos[i]!=Integer.MAX_VALUE){
+                        predecesores[i] = posX;
+                }
+                else{
+                        predecesores[i]=-1;
+                }
+        }
+        int menor = darMenor(costosMinimos,visitados);
+        while(menor!=-1){
+                visitados.add(menor);
+                for(int i = 0; i<costos.length; i++){
+                        int costo = costos[menor][i]!=Integer.MAX_VALUE?costosMinimos[menor]+costos[menor][i]:Integer.MAX_VALUE;
+                        if(costo < costosMinimos[i]){
+                                predecesores[i] = menor;
+                                costosMinimos[i] = costo;
+                        }
+                }
+                menor=darMenor(costosMinimos,visitados);
+        }
+        int minimo = costosMinimos[posY];
+	return minimo;
+	}
+	private static int darMenor(int [] costosMinimos, Set<Integer> visitados){
+		int menor = Integer.MAX_VALUE;
+        int indice=-1;
+        for(int i = 0; i<costosMinimos.length;i++){
+        	if(!visitados.contains(i) && costosMinimos[i] < menor){
+                        menor = costosMinimos[i];
+                        indice=i;
+                }   
+        }   
+        return indice;
+
+	}
+
+	public static int darMenor(Set<Integer> visitados, int[]costosMinimos, int posx){
+		int posMenor = -1;
+		int dist=Integer.MAX_VALUE;
+		for(int i=0;i<costosMinimos.length;i++){
+			if(costosMinimos[i]<dist && i!=posx && !visitados.contains(i)){
+				dist=costosMinimos[i];
+				posMenor = i;
+			}
+		}
+		return posMenor;
+	}
+
+	public static void main(String args[])throws IOException{
+		BufferedReader lector = new BufferedReader(new FileReader("edgetown.in"));
+		String input="";
+		while(!(input=lector.readLine()).equals("0")){
+			int intersecciones = Integer.parseInt(input);
+			costos = new int[intersecciones][intersecciones];
+			costos2 = new int[intersecciones][intersecciones];
+			for(int i=0;i<intersecciones;i++){
+				input = lector.readLine();
+				String div[]=input.split(" ");
+				int pos = Integer.parseInt(div[0]);
+				nodos.add(pos);
+				for(int j=1;j<div.length;j++){
+					costos[pos-1][Integer.parseInt(div[j])-1]=1;
+				}
+			}
+			for(int i=0;i<costos.length;i++){
+				for(int j=0;j<costos.length;j++){
+					if(i!=j && costos[i][j]==0){
+						costos[i][j]=Integer.MAX_VALUE;
+					}
+				}
+			}
+			for(int i=0;i<intersecciones;i++){
+				input = lector.readLine();
+				String div[]=input.split(" ");
+				int pos = Integer.parseInt(div[0]);
+				nodos2.add(pos);
+				for(int j=1;j<div.length;j++){
+					costos2[pos-1][Integer.parseInt(div[j])-1]=1;
+				}
+			}
+			for(int i=0;i<costos.length;i++){
+				for(int j=0;j<costos.length;j++){
+					if(i!=j && costos2[i][j]==0){
+						costos2[i][j]=Integer.MAX_VALUE;
+					}
+				}
+			}
+			input = lector.readLine();
+			int a = Integer.parseInt(input.substring(0,input.indexOf(" ")));
+			int b = Integer.parseInt(input.substring(input.indexOf(" ")+1,input.length()));
+			boolean diego=true;
+			for(int i=0;i<costos.length && diego;i++){
+				for(int j=0;j<costos.length && diego;j++){
+					if(dijkstra(i,j,costos)*a+b < dijkstra(i,j,costos2) && i!=j){
+						diego=false;
+						System.out.println("No");
+					}
+				}
+			}if(diego)
+			System.out.println("Yes");
+		}
+	}
+}

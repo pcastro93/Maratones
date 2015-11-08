@@ -1,0 +1,62 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+public class Turanga{
+
+public static boolean prim[] = new boolean[100000];
+public static HashSet<Integer> mayores = new HashSet<Integer>();
+
+
+public static long solve(int ress){
+	int fin = (int)(Math.sqrt(ress))+1;
+	int diegoval = ress;
+	long res = 1;
+	int cont =0;
+	while((ress&1)==0){
+		ress>>=1;
+		cont++;
+	}
+	res*=(cont+1);
+	int div = 3;
+	cont =0;
+	while(div<=fin){
+	if(ress%div==0){
+		ress/=div;
+		cont++;
+	}else{
+		//if(cont>0)System.out.println(div +" " + cont);
+		res*=(cont+1);
+		div+=2;
+		cont=0;
+		}
+	}
+	if(ress!=1){res*=2;}
+	return res;
+}
+public static void main(String args[]) throws IOException{
+
+BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
+String tmp ="";
+
+for(int n=2;n<Math.sqrt(prim.length);n++)
+if(!prim[n])
+for(int k = n*n;k<prim.length;k+=n)prim[k]=true;
+//for(int ll=100000000;ll<=500000000;ll++) if(new BigInteger(String.valueOf(ll)).isProbablePrime(50))mayores.add(ll);
+//System.out.println("fdfdfd");
+while((tmp = lector.readLine())!=null && !tmp.equals("0 0")){
+	String tal[] = tmp.split(" ");
+	int ress = Math.abs(Integer.parseInt(tal[1])-Integer.parseInt(tal[0]));
+//	long res = 1;
+//	if((ress<prim.length && !prim[ress])|| ress>=prim.length && mayores.contains(ress)){System.out.println("2");continue;}
+//	for(int n=2;ress>1 && n<Math.sqrt(ress);n+=(1+(n&1))){
+//	int cont = 0;
+//	while(((n>=100000000 && mayores.contains(n)) || (n<prim.length && !prim[n])) && ress%n==0){cont++;ress/=n;}
+//	if(cont>0)res*=(cont+1);
+//	}
+//	System.out.println(res);
+	System.out.println(solve(ress));
+}
+
+}
+}

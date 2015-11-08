@@ -1,0 +1,18 @@
+Hola, me gustaria comentar algunas cosas sobre este problema que observamos con mis companeros de WTF.
+
+1. El problema no da restricciones para ai, ti, sj, qj, R. Lo cual no permite saber en que tipo de dato guardarlos, cosa que es bastante importante.
+
+2. La solucion del problema dice que para optimizar el uso de la memoria: primero, se usen solo dos filas de la matriz de knapsack, lo cual reduce muchisimo pero no suficiente todavia para un C de 2^30 y segundo que saque el gcd de todos los costos de los paquetes de acciones y de esta forma el tamano de la matriz seria 2 x (C / gcd(costo paquetes)). Lo cual es una solucion especifica para los testcases, ya que si por ejemplo el gcd diera 1(hay costos coprimos) entonces la memoria no se reduce, obteniendo un error en la ejecucion del programa.
+
+Caso de ejemplo:
+
+200000000
+4 4
+10 15 
+8 10 
+20 25 
+5 10 
+1 1 1
+1 2 1
+1 3 1
+1 4 1
